@@ -44,12 +44,12 @@ def consultar_tasa(token):
     r.raise_for_status()
     return r.json()
 
-# Endpoint raíz para probar si la API está viva
+# Endpoint raíz para verificar estado
 @app.route("/", methods=["GET"])
 def index():
     return jsonify({"mensaje": "API de tasa BPD activa"}), 200
 
-# Endpoint principal
+# Endpoint para la tasa
 @app.route("/tasa", methods=["GET"])
 def endpoint_tasa():
     try:
@@ -70,4 +70,5 @@ def endpoint_tasa():
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))  # ← este cambio es esencial para Render
+    app.run(host="0.0.0.0", port=port)
